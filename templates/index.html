@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myanmar Route Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 24px;
+            background: #f4f7fb;
+            color: #1f2a37;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        select, button {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-size: 16px;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .result-row {
+            margin: 8px 0;
+        }
+        .concept {
+            margin-top: 20px;
+            background: #eefbf5;
+            border-left: 5px solid #16a34a;
+            padding: 14px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Myanmar Search Visualizer</h1>
+
+        <div class="controls">
+            <div>
+                <label for="source">Source</label>
+                <select id="source"></select>
+            </div>
+            <div>
+                <label for="destination">Destination</label>
+                <select id="destination"></select>
+            </div>
+            <div>
+                <label for="algorithm">Algorithm</label>
+                <select id="algorithm"></select>
+            </div>
+        </div>
+
+        <button id="searchBtn">Find Route</button>
+
+        <div class="output" id="output">
+            <div class="result-row">Select a source, destination, and algorithm.</div>
+        </div>
+
+        <div class="concept" id="concept"></div>
+    </div>
+
+    <script>
+        async function loadAlgorithms() {
+            const response = await fetch('/api/algorithms');
+            const data = await response.json();
+            const algorithmSelect = document.getElementById('algorithm');
+            algorithmSelect.innerHTML = data.algorithms.map(name => `<option value="${name}">${name}</option>`).join('');
+        }
+
+        async function fetchCities() {
+            const response = await fetch('/api/cities');
+            const data = await response.json();
+            const cities = data.cities || [];
+            const sourceSelect = document.getElementById('source');
+            const destinationSelect = document.getElementById('destination');
+            sourceSelect.innerHTML = cities.map(city => `<option value="${city}">${city}</option>`).join('');
+            destinationSelect.innerHTML = cities.map(city => `<option value="${city}">${city}</option>`).join('');
+            if (cities.length > 1) {
+                sourceSelect.value = cities[0];
+                destinationSelect.value = cities[1];
+            }
+        }
+
+        document.getElementById('searchBtn').addEventListener('click', async () => {
+            const source = document.getElementById('source').value;
+            const destination = document.getElementById('destination').value;
+            const algorithm = document.getElementById('algorithm').value;
+
+            const response = await fetch('/api/search', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ source, destination, algorithm })
+            });
+            const result = await response.json();
+
+            const output = document.getElementById('output');
+            if (result.error) {
+                output.innerHTML = `<div class="result-row">Error: ${result.error}</div>`;
+                document.getElementById('concept').innerHTML = '';
+                return;
+            }
+
+            const pathText = result.path.length ? result.path.join(' → ') : 'No path found';
+            output.innerHTML = `
+                <div class="result-row"><strong>Algorithm:</strong> ${result.algorithm}</div>
+                <div class="result-row"><strong>Source:</strong> ${result.source}</div>
+                <div class="result-row"><strong>Destination:</strong> ${result.destination}</div>
+                <div class="result-row"><strong>Path:</strong> ${pathText}</div>
+                <div class="result-row"><strong>Cost:</strong> ${result.cost}</div>
+                <div class="result-row"><strong>Visited:</strong> ${result.visited.join(', ')}</div>
+            `;
+
+            const concept = result.concept || {};
+            document.getElementById('concept').innerHTML = `
+                <h3>${concept.title || 'Algorithm Concept'}</h3>
+                <p><strong>Main Idea:</strong> ${concept.main_idea || ''}</p>
+                <p><strong>Node Selection:</strong> ${concept.node_selection || ''}</p>
+                <p><strong>Information Used:</strong> ${concept.information_used || ''}</p>
+            `;
+        });
+
+        async function init() {
+            await loadAlgorithms();
+            await fetchCities();
+        }
+
+        init();
+    </script>
+</body>
+</html>

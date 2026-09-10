@@ -1,0 +1,372 @@
+{
+  "country": "Myanmar",
+  "nodes": [
+    {
+      "id": "Yangon",
+      "name": "Yangon",
+      "lat": 16.8661,
+      "lon": 96.1951
+    },
+    {
+      "id": "Bago",
+      "name": "Bago",
+      "lat": 17.3357,
+      "lon": 96.4814
+    },
+    {
+      "id": "Naypyidaw",
+      "name": "Naypyidaw",
+      "lat": 19.7633,
+      "lon": 96.0785
+    },
+    {
+      "id": "Mandalay",
+      "name": "Mandalay",
+      "lat": 21.9588,
+      "lon": 96.0891
+    },
+    {
+      "id": "Pyin Oo Lwin",
+      "name": "Pyin Oo Lwin",
+      "lat": 22.0368,
+      "lon": 96.4597
+    },
+    {
+      "id": "Lashio",
+      "name": "Lashio",
+      "lat": 22.977,
+      "lon": 97.7526
+    },
+    {
+      "id": "Meiktila",
+      "name": "Meiktila",
+      "lat": 20.8838,
+      "lon": 95.8582
+    },
+    {
+      "id": "Taunggyi",
+      "name": "Taunggyi",
+      "lat": 20.7897,
+      "lon": 97.0365
+    },
+    {
+      "id": "Pathein",
+      "name": "Pathein",
+      "lat": 16.7833,
+      "lon": 94.7333
+    },
+    {
+      "id": "Mawlamyine",
+      "name": "Mawlamyine",
+      "lat": 16.4456,
+      "lon": 97.626
+    },
+    {
+      "id": "Hpa-An",
+      "name": "Hpa-An",
+      "lat": 16.8694,
+      "lon": 97.6679
+    },
+    {
+      "id": "Dawei",
+      "name": "Dawei",
+      "lat": 14.0835,
+      "lon": 98.1998
+    },
+    {
+      "id": "Myeik",
+      "name": "Myeik",
+      "lat": 12.4398,
+      "lon": 98.6002
+    },
+    {
+      "id": "Sagaing",
+      "name": "Sagaing",
+      "lat": 21.8787,
+      "lon": 95.9786
+    },
+    {
+      "id": "Monywa",
+      "name": "Monywa",
+      "lat": 22.0717,
+      "lon": 95.1295
+    },
+    {
+      "id": "Kalay",
+      "name": "Kalay",
+      "lat": 23.1944,
+      "lon": 94.0365
+    },
+    {
+      "id": "Magway",
+      "name": "Magway",
+      "lat": 20.15,
+      "lon": 94.9325
+    },
+    {
+      "id": "Sittwe",
+      "name": "Sittwe",
+      "lat": 20.1467,
+      "lon": 92.8998
+    },
+    {
+      "id": "Myitkyina",
+      "name": "Myitkyina",
+      "lat": 25.3833,
+      "lon": 97.4
+    },
+    {
+      "id": "Muse",
+      "name": "Muse",
+      "lat": 23.27,
+      "lon": 97.929
+    },
+    {
+      "id": "Kyaikto",
+      "name": "Kyaikto",
+      "lat": 17.3378,
+      "lon": 97.0244
+    },
+    {
+      "id": "Akyab",
+      "name": "Akyab",
+      "lat": 20.15,
+      "lon": 92.9
+    }
+  ],
+  "edges": [
+    {
+      "source": "Yangon",
+      "target": "Bago",
+      "distance_km": 69.87
+    },
+    {
+      "source": "Bago",
+      "target": "Naypyidaw",
+      "distance_km": 310.24
+    },
+    {
+      "source": "Naypyidaw",
+      "target": "Mandalay",
+      "distance_km": 269.31
+    },
+    {
+      "source": "Mandalay",
+      "target": "Pyin Oo Lwin",
+      "distance_km": 65.39
+    },
+    {
+      "source": "Mandalay",
+      "target": "Lashio",
+      "distance_km": 281.32
+    },
+    {
+      "source": "Naypyidaw",
+      "target": "Meiktila",
+      "distance_km": 143.13
+    },
+    {
+      "source": "Meiktila",
+      "target": "Taunggyi",
+      "distance_km": 182.03
+    },
+    {
+      "source": "Yangon",
+      "target": "Pathein",
+      "distance_km": 195.07
+    },
+    {
+      "source": "Yangon",
+      "target": "Mawlamyine",
+      "distance_km": 295.17
+    },
+    {
+      "source": "Mawlamyine",
+      "target": "Hpa-An",
+      "distance_km": 62.08
+    },
+    {
+      "source": "Yangon",
+      "target": "Dawei",
+      "distance_km": 605.77
+    },
+    {
+      "source": "Dawei",
+      "target": "Myeik",
+      "distance_km": 244.28
+    },
+    {
+      "source": "Mandalay",
+      "target": "Sagaing",
+      "distance_km": 19.04
+    },
+    {
+      "source": "Sagaing",
+      "target": "Monywa",
+      "distance_km": 119.07
+    },
+    {
+      "source": "Monywa",
+      "target": "Kalay",
+      "distance_km": 237.11
+    },
+    {
+      "source": "Naypyidaw",
+      "target": "Magway",
+      "distance_km": 164.99
+    },
+    {
+      "source": "Magway",
+      "target": "Sittwe",
+      "distance_km": 493.08
+    },
+    {
+      "source": "Mandalay",
+      "target": "Myitkyina",
+      "distance_km": 584.24
+    },
+    {
+      "source": "Myeik",
+      "target": "Dawei",
+      "distance_km": 244.28
+    },
+    {
+      "source": "Muse",
+      "target": "Lashio",
+      "distance_km": 48.05
+    },
+    {
+      "source": "Mandalay",
+      "target": "Muse",
+      "distance_km": 327.95
+    },
+    {
+      "source": "Bago",
+      "target": "Kyaikto",
+      "distance_km": 87.4
+    },
+    {
+      "source": "Kyaikto",
+      "target": "Hpa-An",
+      "distance_km": 120.93
+    },
+    {
+      "source": "Magway",
+      "target": "Akyab",
+      "distance_km": 494.78
+    },
+    {
+      "source": "Sittwe",
+      "target": "Akyab",
+      "distance_km": 0.42
+    },
+    {
+      "source": "Pathein",
+      "target": "Hpa-An",
+      "distance_km": 464.69
+    },
+    {
+      "source": "Naypyidaw",
+      "target": "Taunggyi",
+      "distance_km": 282.66
+    }
+  ],
+  "adjacency": {
+    "Yangon": {
+      "Bago": 69.87,
+      "Pathein": 195.07,
+      "Mawlamyine": 295.17,
+      "Dawei": 605.77
+    },
+    "Bago": {
+      "Yangon": 69.87,
+      "Naypyidaw": 310.24,
+      "Kyaikto": 87.4
+    },
+    "Naypyidaw": {
+      "Bago": 310.24,
+      "Mandalay": 269.31,
+      "Meiktila": 143.13,
+      "Magway": 164.99,
+      "Taunggyi": 282.66
+    },
+    "Mandalay": {
+      "Naypyidaw": 269.31,
+      "Pyin Oo Lwin": 65.39,
+      "Lashio": 281.32,
+      "Sagaing": 19.04,
+      "Myitkyina": 584.24,
+      "Muse": 327.95
+    },
+    "Pyin Oo Lwin": {
+      "Mandalay": 65.39
+    },
+    "Lashio": {
+      "Mandalay": 281.32,
+      "Muse": 48.05
+    },
+    "Meiktila": {
+      "Naypyidaw": 143.13,
+      "Taunggyi": 182.03
+    },
+    "Taunggyi": {
+      "Meiktila": 182.03,
+      "Naypyidaw": 282.66
+    },
+    "Pathein": {
+      "Yangon": 195.07,
+      "Hpa-An": 464.69
+    },
+    "Mawlamyine": {
+      "Yangon": 295.17,
+      "Hpa-An": 62.08
+    },
+    "Hpa-An": {
+      "Mawlamyine": 62.08,
+      "Kyaikto": 120.93,
+      "Pathein": 464.69
+    },
+    "Dawei": {
+      "Yangon": 605.77,
+      "Myeik": 244.28
+    },
+    "Myeik": {
+      "Dawei": 244.28
+    },
+    "Sagaing": {
+      "Mandalay": 19.04,
+      "Monywa": 119.07
+    },
+    "Monywa": {
+      "Sagaing": 119.07,
+      "Kalay": 237.11
+    },
+    "Kalay": {
+      "Monywa": 237.11
+    },
+    "Magway": {
+      "Naypyidaw": 164.99,
+      "Sittwe": 493.08,
+      "Akyab": 494.78
+    },
+    "Sittwe": {
+      "Magway": 493.08,
+      "Akyab": 0.42
+    },
+    "Myitkyina": {
+      "Mandalay": 584.24
+    },
+    "Muse": {
+      "Lashio": 48.05,
+      "Mandalay": 327.95
+    },
+    "Kyaikto": {
+      "Bago": 87.4,
+      "Hpa-An": 120.93
+    },
+    "Akyab": {
+      "Magway": 494.78,
+      "Sittwe": 0.42
+    }
+  }
+}
