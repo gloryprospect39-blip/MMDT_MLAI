@@ -12,7 +12,7 @@
             color: #1f2a37;
         }
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: auto;
             background: white;
             border-radius: 12px;
@@ -40,6 +40,52 @@
             color: white;
             border: none;
             cursor: pointer;
+        }
+        .map-wrapper {
+            margin-top: 20px;
+            border: 1px solid #dfe7f1;
+            border-radius: 12px;
+            background: linear-gradient(180deg, #f8fbff 0%, #edf5ff 100%);
+            overflow: hidden;
+        }
+        svg {
+            width: 100%;
+            height: 480px;
+            display: block;
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .edge {
+            stroke: #94a3b8;
+            stroke-width: 1.5;
+            fill: none;
+            opacity: 0.9;
+        }
+        .route {
+            stroke: #ef4444;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            filter: drop-shadow(0 0 4px rgba(239,68,68,0.5));
+        }
+        .node {
+            fill: #0f172a;
+            stroke: white;
+            stroke-width: 2;
+        }
+        .node.source {
+            fill: #16a34a;
+        }
+        .node.destination {
+            fill: #dc2626;
+        }
+        .node.route {
+            fill: #2563eb;
+        }
+        .label {
+            font-size: 11px;
+            fill: #0f172a;
+            font-weight: 600;
         }
         .output {
             margin-top: 20px;
@@ -81,6 +127,10 @@
 
         <button id="searchBtn">Find Route</button>
 
+        <div class="map-wrapper">
+            <svg id="map" viewBox="0 0 900 480" aria-label="Myanmar route map"></svg>
+        </div>
+
         <div class="output" id="output">
             <div class="result-row">Select a source, destination, and algorithm.</div>
         </div>
@@ -89,6 +139,103 @@
     </div>
 
     <script>
+        const svg = document.getElementById('map');
+        const selectedRoute = { path: [], source: null, destination: null };
+
+        function projectPoint(lat, lon, bounds) {
+            const width = 900;
+            const height = 480;
+            const margin = 30;
+            const x = margin + ((lon - bounds.minLon) / (bounds.maxLon - bounds.minLon || 1)) * (width - margin * 2);
+            const y = margin + ((bounds.maxLat - lat) / (bounds.maxLat - bounds.minLat || 1)) * (height - margin * 2);
+            return { x, y };
+        }
+
+        function renderGraph(graph) {
+            const nodes = graph.nodes || [];
+            if (!nodes.length) {
+                svg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="#475569" font-size="18">No graph data available.</text>';
+                return;
+            }
+
+            const minLat = Math.min(...nodes.map(n => n.lat));
+            const maxLat = Math.max(...nodes.map(n => n.lat));
+            const minLon = Math.min(...nodes.map(n => n.lon));
+            const maxLon = Math.max(...nodes.map(n => n.lon));
+            const bounds = { minLat, maxLat, minLon, maxLon };
+
+            const edgeLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const nodeLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const routeLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+            (graph.edges || []).forEach(edge => {
+                const source = nodes.find(node => node.id === edge.source);
+                const target = nodes.find(node => node.id === edge.target);
+                if (!source || !target) return;
+                const sourcePos = projectPoint(source.lat, source.lon, bounds);
+                const targetPos = projectPoint(target.lat, target.lon, bounds);
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', sourcePos.x);
+                line.setAttribute('y1', sourcePos.y);
+                line.setAttribute('x2', targetPos.x);
+                line.setAttribute('y2', targetPos.y);
+                line.setAttribute('class', 'edge');
+                edgeLayer.appendChild(line);
+            });
+
+            nodes.forEach(node => {
+                const pos = projectPoint(node.lat, node.lon, bounds);
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', pos.x);
+                circle.setAttribute('cy', pos.y);
+                circle.setAttribute('r', 5);
+                circle.setAttribute('class', 'node');
+                if (selectedRoute.source === node.id) circle.setAttribute('class', 'node source');
+                if (selectedRoute.destination === node.id) circle.setAttribute('class', 'node destination');
+                if (selectedRoute.path.includes(node.id)) circle.setAttribute('class', 'node route');
+                nodeLayer.appendChild(circle);
+
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', pos.x + 8);
+                label.setAttribute('y', pos.y - 8);
+                label.setAttribute('class', 'label');
+                label.textContent = node.id;
+                nodeLayer.appendChild(label);
+            });
+
+            if (selectedRoute.path.length > 1) {
+                const routePoints = selectedRoute.path
+                    .map(city => {
+                        const node = nodes.find(item => item.id === city);
+                        if (!node) return null;
+                        const pos = projectPoint(node.lat, node.lon, bounds);
+                        return `${pos.x},${pos.y}`;
+                    })
+                    .filter(Boolean)
+                    .join(' ');
+
+                if (routePoints) {
+                    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+                    polyline.setAttribute('points', routePoints);
+                    polyline.setAttribute('class', 'route');
+                    routeLayer.appendChild(polyline);
+                }
+            }
+
+            svg.innerHTML = '';
+            svg.appendChild(edgeLayer);
+            svg.appendChild(routeLayer);
+            svg.appendChild(nodeLayer);
+        }
+
+        async function loadGraph() {
+            const response = await fetch('/api/graph');
+            const graph = await response.json();
+            renderGraph(graph);
+            return graph;
+        }
+
         async function loadAlgorithms() {
             const response = await fetch('/api/algorithms');
             const data = await response.json();
@@ -108,12 +255,17 @@
                 sourceSelect.value = cities[0];
                 destinationSelect.value = cities[1];
             }
+            selectedRoute.source = sourceSelect.value;
+            selectedRoute.destination = destinationSelect.value;
+            renderGraph(await loadGraph());
         }
 
         document.getElementById('searchBtn').addEventListener('click', async () => {
             const source = document.getElementById('source').value;
             const destination = document.getElementById('destination').value;
             const algorithm = document.getElementById('algorithm').value;
+            selectedRoute.source = source;
+            selectedRoute.destination = destination;
 
             const response = await fetch('/api/search', {
                 method: 'POST',
@@ -124,11 +276,14 @@
 
             const output = document.getElementById('output');
             if (result.error) {
+                selectedRoute.path = [];
                 output.innerHTML = `<div class="result-row">Error: ${result.error}</div>`;
                 document.getElementById('concept').innerHTML = '';
+                renderGraph(await loadGraph());
                 return;
             }
 
+            selectedRoute.path = result.path || [];
             const pathText = result.path.length ? result.path.join(' → ') : 'No path found';
             output.innerHTML = `
                 <div class="result-row"><strong>Algorithm:</strong> ${result.algorithm}</div>
@@ -146,6 +301,9 @@
                 <p><strong>Node Selection:</strong> ${concept.node_selection || ''}</p>
                 <p><strong>Information Used:</strong> ${concept.information_used || ''}</p>
             `;
+
+            const graph = await loadGraph();
+            renderGraph(graph);
         });
 
         async function init() {

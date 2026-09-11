@@ -83,6 +83,30 @@ def get_cities():
     return jsonify({"cities": cities})
 
 
+@app.route("/api/graph")
+def get_graph():
+    return jsonify({
+        "country": graph_data.get("country", ""),
+        "nodes": [
+            {
+                "id": node["id"],
+                "name": node.get("name", node["id"]),
+                "lat": node["lat"],
+                "lon": node["lon"],
+            }
+            for node in graph_data.get("nodes", [])
+        ],
+        "edges": [
+            {
+                "source": edge["source"],
+                "target": edge["target"],
+                "distance_km": edge.get("distance_km"),
+            }
+            for edge in graph_data.get("edges", [])
+        ],
+    })
+
+
 @app.route("/api/search", methods=["POST"])
 def search_route():
     payload = request.get_json(silent=True) or {}
